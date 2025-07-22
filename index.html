@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Employee Salary Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 25px;
+            padding: 12px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #222;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form id="salaryForm">
+        <h1>Employee Salary Prediction</h1>
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" min="18" max="100" required />
+
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" required>
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+        </select>
+
+        <label for="experience">Years of Experience</label>
+        <input type="number" id="experience" name="experience" min="0" step="0.1" required />
+
+        <label for="education">Education Level</label>
+        <select id="education" name="education" required>
+            <option value="">Select education level</option>
+            <option value="highschool">High School</option>
+            <option value="bachelor">Bachelor's Degree</option>
+            <option value="master">Master's Degree</option>
+            <option value="phd">PhD</option>
+        </select>
+
+        <button type="submit">Predict Salary</button>
+
+        <div id="result"></div>
+    </form>
+
+    <script>
+        document.getElementById('salaryForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const experience = parseFloat(document.getElementById('experience').value);
+            const education = document.getElementById('education').value;
+
+            // Base salary and factors
+            let baseSalary = 25000;
+            let ageFactor = 0;
+            let genderFactor = 0;
+            let experienceFactor = experience * 2000;
+            let educationFactor = 0;
+
+            // Age factor: add $500 for each year above 25, capped at 20 years
+            if (age > 25) {
+                ageFactor = Math.min(age - 25, 20) * 500;
+            }
+
+            // Gender factor: example adjustment (could be zero for fairness)
+            switch(gender) {
+                case 'male':
+                    genderFactor = 1000;
+                    break;
+                case 'female':
+                    genderFactor = 1500;
+                    break;
+                case 'other':
+                    genderFactor = 1200;
+                    break;
+            }
+
+            // Education factor
+            switch(education) {
+                case 'highschool':
+                    educationFactor = 0;
+                    break;
+                case 'bachelor':
+                    educationFactor = 10000;
+                    break;
+                case 'master':
+                    educationFactor = 20000;
+                    break;
+                case 'phd':
+                    educationFactor = 30000;
+                    break;
+            }
+
+            const predictedSalary = baseSalary + ageFactor + genderFactor + experienceFactor + educationFactor;
+
+            document.getElementById('result').textContent = 'Predicted Salary: $' + predictedSalary.toFixed(2);
+        });
+    </script>
+</body>
+</html>
